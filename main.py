@@ -92,16 +92,6 @@ def handle_dialog(req, res, step):
         # Пользователь согласился, прощаемся.
         res['response']['text'] = 'Слона можно найти на Яндекс.Маркете!'
         # res['response']['end_session'] = True
-        return 1
-
-    elif step == 0:
-        res['response']['text'] = \
-            f"Все говорят '{req['request']['original_utterance']}', а ты купи слона!"
-        res['response']['buttons'] = get_suggests(user_id)
-        return 0
-
-    elif step == 1:
-
         sessionStorage[user_id] = {
             'suggests': [
                 "Не хочу.",
@@ -113,7 +103,13 @@ def handle_dialog(req, res, step):
         res['response']['text'] = 'Привет! Купи зайца!'
         # Получим подсказки
         res['response']['buttons'] = get_suggests(user_id)
-        return 2
+        return 1
+
+    elif step == 0:
+        res['response']['text'] = \
+            f"Все говорят '{req['request']['original_utterance']}', а ты купи слона!"
+        res['response']['buttons'] = get_suggests(user_id)
+        return 0
 
     elif req['request']['original_utterance'].lower() in [
         'ладно',
@@ -123,16 +119,16 @@ def handle_dialog(req, res, step):
         'я покупаю',
         'я куплю',
         'ок'
-    ] and step == 2:
+    ] and step == 1:
         # Пользователь согласился, прощаемся.
         res['response']['text'] = 'Зайца можно найти на Яндекс.Маркете!'
         res['response']['end_session'] = True
 
-    elif step == 2:
+    elif step == 1:
         res['response']['text'] = \
             f"Все говорят '{req['request']['original_utterance']}', а ты купи зайца!"
         res['response']['buttons'] = get_suggests(user_id)
-        return 2
+        return 1
 
 
 # Функция возвращает две подсказки для ответа.
