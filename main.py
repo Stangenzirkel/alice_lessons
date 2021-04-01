@@ -27,6 +27,7 @@ logging.basicConfig(level=logging.INFO)
 # Когда он откажется купить слона,
 # то мы уберем одну подсказку. Как будто что-то меняется :)
 sessionStorage = {}
+step = 0
 
 
 @app.route('/post', methods=['POST'])
@@ -34,7 +35,6 @@ sessionStorage = {}
 # Внутри функции доступен request.json - это JSON,
 # который отправила нам Алиса в запросе POST
 def main():
-    slon = 0
     logging.info(f'Request: {request.json!r}')
 
     # Начинаем формировать ответ, согласно документации
@@ -51,7 +51,7 @@ def main():
     # Отправляем request.json и response в функцию handle_dialog.
     # Она сформирует оставшиеся поля JSON, которые отвечают
     # непосредственно за ведение диалога
-    slon = handle_dialog(request.json, response, slon)
+    handle_dialog(request.json, response)
 
     logging.info(f'Response:  {response!r}')
 
@@ -59,7 +59,8 @@ def main():
     return json.dumps(response)
 
 
-def handle_dialog(req, res, step):
+def handle_dialog(req, res):
+    global step
     user_id = req['session']['user_id']
 
     if req['session']['new']:
@@ -103,13 +104,12 @@ def handle_dialog(req, res, step):
         res['response']['text'] = 'Привет! Купи зайца!'
         # Получим подсказки
         res['response']['buttons'] = get_suggests(user_id)
-        return 1
+        step = 1
 
     elif step == 0:
         res['response']['text'] = \
             f"Все говорят '{req['request']['original_utterance']}', а ты купи слона!"
         res['response']['buttons'] = get_suggests(user_id)
-        return 0
 
     elif req['request']['original_utterance'].lower() in [
         'ладно',
@@ -123,12 +123,12 @@ def handle_dialog(req, res, step):
         # Пользователь согласился, прощаемся.
         res['response']['text'] = 'Зайца можно найти на Яндекс.Маркете!'
         res['response']['end_session'] = True
+        step = 0
 
     elif step == 1:
         res['response']['text'] = \
             f"Все говорят '{req['request']['original_utterance']}', а ты купи зайца!"
         res['response']['buttons'] = get_suggests(user_id)
-        return 1
 
 
 # Функция возвращает две подсказки для ответа.
