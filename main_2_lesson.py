@@ -140,12 +140,12 @@ def handle_dialog(res, req):
 
 
 def play_game(res, req):
-    country = ''
-    city = ''
     user_id = req['session']['user_id']
     attempt = sessionStorage[user_id]['attempt']
     ask_country = sessionStorage[user_id]['ask_country']
     if ask_country:
+        country = sessionStorage[user_id]['country']
+        city = sessionStorage[user_id]['city']
         if country in req['request']['nlu']['tokens']:
             res['response']['text'] = 'Правильно! Сыграем ещё?'
 
@@ -182,6 +182,7 @@ def play_game(res, req):
             city = random.choice(list(cities))
         # записываем город в информацию о пользователе
         sessionStorage[user_id]['city'] = city
+        sessionStorage[user_id]['country'] = country
         # добавляем в ответ картинку
         res['response']['card'] = {}
         res['response']['card']['type'] = 'BigImage'
