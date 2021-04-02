@@ -178,6 +178,10 @@ def play_game(res, req):
                     'hide': True
                 },
                 {
+                    'title': 'Покажи город на карте',
+                    'url': f'https://yandex.ru/maps/?mode=search&text={city}'
+                },
+                {
                     'title': 'Помощь',
                     'hide': True
                 }
@@ -201,6 +205,10 @@ def play_game(res, req):
                     {
                         'title': 'Нет',
                         'hide': True
+                    },
+                    {
+                        'title': 'Покажи город на карте',
+                        'url': f'https://yandex.ru/maps/?mode=search&text={city}'
                     },
                     {
                         'title': 'Помощь',
