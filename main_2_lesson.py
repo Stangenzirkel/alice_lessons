@@ -113,6 +113,7 @@ def handle_dialog(res, req):
                     sessionStorage[user_id]['game_started'] = True
                     # номер попытки, чтобы показывать фото по порядку
                     sessionStorage[user_id]['attempt'] = 1
+                    sessionStorage[user_id]['ask_country'] = False
                     # функция, которая выбирает город для игры и показывает фото
                     play_game(res, req)
             elif 'нет' in req['request']['nlu']['tokens']:
@@ -140,10 +141,10 @@ def handle_dialog(res, req):
 
 def play_game(res, req):
     country = ''
-    ask_country = False
     city = ''
     user_id = req['session']['user_id']
     attempt = sessionStorage[user_id]['attempt']
+    ask_country = sessionStorage[user_id]['ask_country']
     if ask_country:
         if country in req['request']['nlu']['tokens']:
             res['response']['text'] = 'Правильно! Сыграем ещё?'
@@ -170,6 +171,7 @@ def play_game(res, req):
             }
         ]
         sessionStorage[user_id]['game_started'] = False
+        return
     elif attempt == 1:
         # если попытка первая, то случайным образом выбираем город для гадания
         city = random.choice(list(cities))
@@ -198,9 +200,8 @@ def play_game(res, req):
         if get_city(req) == city:
             # если да, то добавляем город к sessionStorage[user_id]['guessed_cities'] и
             res['response']['text'] = 'Правильно! Пробуешь отгадать страну?'
-
+            sessionStorage[user_id]['ask_country'] = True
             sessionStorage[user_id]['guessed_cities'].append(city)
-            ask_country = True
             return
         else:
             # если нет
