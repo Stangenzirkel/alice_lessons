@@ -39,6 +39,12 @@ def handle_dialog(res, req):
     user_id = req['session']['user_id']
     if req['session']['new']:
         res['response']['text'] = 'Привет! Назови своё имя!'
+        res['response']['buttons'] = [
+            {
+                'title': 'Помощь',
+                'hide': False
+            }
+        ]
         sessionStorage[user_id] = {
             'first_name': None,  # здесь будет храниться имя
             'game_started': False
@@ -46,7 +52,10 @@ def handle_dialog(res, req):
         }
         return
 
-    if sessionStorage[user_id]['first_name'] is None:
+    elif "помощь" in req['request']['nlu']['tokens']:
+        res['response']['text'] = 'Текст помощи'
+
+    elif sessionStorage[user_id]['first_name'] is None:
         first_name = get_first_name(req)
         if first_name is None:
             res['response']['text'] = 'Не расслышала имя. Повтори, пожалуйста!'
@@ -132,6 +141,16 @@ def play_game(res, req):
             # если да, то добавляем город к sessionStorage[user_id]['guessed_cities'] и
             # отправляем пользователя на второй круг. Обратите внимание на этот шаг на схеме.
             res['response']['text'] = 'Правильно! Сыграем ещё?'
+            res['response']['buttons'] = [
+                {
+                    'title': 'Да',
+                    'hide': True
+                },
+                {
+                    'title': 'Нет',
+                    'hide': True
+                }
+            ]
             sessionStorage[user_id]['guessed_cities'].append(city)
             sessionStorage[user_id]['game_started'] = False
             return
