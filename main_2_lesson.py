@@ -139,9 +139,9 @@ def handle_dialog(res, req):
 
 
 def play_game(res, req):
-    country = None
+    country = ''
     ask_country = False
-    city = None
+    city = ''
     user_id = req['session']['user_id']
     attempt = sessionStorage[user_id]['attempt']
     if ask_country:
