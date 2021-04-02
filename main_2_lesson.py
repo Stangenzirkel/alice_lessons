@@ -150,7 +150,8 @@ def play_game(res, req):
             res['response']['text'] = 'Правильно! Сыграем ещё?'
 
         else:
-            res['response']['text'] = 'Неправильно, но ты все равно молодец, что отгадал город! Сыграем ещё?'
+            res['response']['text'] = f'Неправильно, но ты все равно молодец, что отгадал город!' \
+                                      f' Это {country}. Сыграем ещё?'
         res['response']['buttons'] = [
             {
                 'title': 'Да',
@@ -175,7 +176,7 @@ def play_game(res, req):
     elif attempt == 1:
         # если попытка первая, то случайным образом выбираем город для гадания
         city = random.choice(list(cities))
-        country = get_country(city)
+        country = get_country(city).lower()
         # выбираем его до тех пор пока не выбираем город, которого нет в sessionStorage[user_id]['guessed_cities']
         while city in sessionStorage[user_id]['guessed_cities']:
             city = random.choice(list(cities))
