@@ -179,7 +179,8 @@ def play_game(res, req):
                 },
                 {
                     'title': 'Покажи город на карте',
-                    'url': f'https://yandex.ru/maps/?mode=search&text={city}'
+                    'url': f'https://yandex.ru/maps/?mode=search&text={city}',
+                    'hide': True
                 },
                 {
                     'title': 'Помощь',
@@ -208,7 +209,8 @@ def play_game(res, req):
                     },
                     {
                         'title': 'Покажи город на карте',
-                        'url': f'https://yandex.ru/maps/?mode=search&text={city}'
+                        'url': f'https://yandex.ru/maps/?mode=search&text={city}',
+                        'hide': True
                     },
                     {
                         'title': 'Помощь',
