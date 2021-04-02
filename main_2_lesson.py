@@ -53,7 +53,7 @@ def handle_dialog(res, req):
         return
 
     elif "помощь" in req['request']['nlu']['tokens']:
-        res['response']['text'] = 'Текст помощи'
+        res['response']['text'] = 'Текст справки по игре'
 
     elif sessionStorage[user_id]['first_name'] is None:
         first_name = get_first_name(req)
